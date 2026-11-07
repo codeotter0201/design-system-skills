@@ -1,0 +1,13 @@
+:root {
+  --ref-ink-900: #1A1C1E;
+  --ref-paper-50: #f7f5f2;
+}
+:root {
+  --background: var(--ref-paper-50);
+  --foreground: var(--ref-ink-900);
+  --primary: oklch(55% 0.18 250);
+  --primary-foreground: #fff;
+}
+.dark {
+  --background: #111318;
+}

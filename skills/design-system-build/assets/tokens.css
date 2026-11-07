@@ -1,0 +1,206 @@
+/*
+ * Design tokens: the single source of every value (Tailwind CSS v4, semantic variables compatible with shadcn/ui).
+ *
+ * Rules
+ * 1. Only this file may contain color literals and raw sizes.
+ * 2. Components and pages use the semantic layer only (bg-primary, text-muted-foreground, p-4), never the reference layer (--ref-*).
+ * 3. When a value here changes, update the YAML in DESIGN.md too: same names, same light mode values.
+ * 4. Replace every TODO(design) in phase 3. Add or remove reference tokens to fit the chosen direction.
+ */
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Reference layer: raw values, referenced only by the semantic layer in this file ---------- */
+:root {
+  --ref-neutral-0: TODO(design);
+  --ref-neutral-50: TODO(design);
+  --ref-neutral-100: TODO(design);
+  --ref-neutral-200: TODO(design);
+  --ref-neutral-500: TODO(design);
+  --ref-neutral-700: TODO(design);
+  --ref-neutral-900: TODO(design);
+  --ref-neutral-950: TODO(design);
+  --ref-brand-500: TODO(design);
+  --ref-brand-600: TODO(design);
+  --ref-red-600: TODO(design);
+  --ref-green-600: TODO(design);
+  --ref-amber-500: TODO(design);
+}
+
+/* ---------- Semantic layer: light mode (mirrored by colors in DESIGN.md) ---------- */
+:root {
+  --background: TODO(design);
+  --foreground: TODO(design);
+  --card: TODO(design);
+  --card-foreground: TODO(design);
+  --popover: TODO(design);
+  --popover-foreground: TODO(design);
+  --primary: TODO(design);
+  --primary-foreground: TODO(design);
+  --secondary: TODO(design);
+  --secondary-foreground: TODO(design);
+  --muted: TODO(design);
+  --muted-foreground: TODO(design);
+  --accent: TODO(design);
+  --accent-foreground: TODO(design);
+  --destructive: TODO(design);
+  --destructive-foreground: TODO(design);
+  --success: TODO(design);
+  --success-foreground: TODO(design);
+  --warning: TODO(design);
+  --warning-foreground: TODO(design);
+  --border: TODO(design);
+  --input: TODO(design);
+  --ring: TODO(design);
+  --chart-1: TODO(design);
+  --chart-2: TODO(design);
+  --chart-3: TODO(design);
+  --chart-4: TODO(design);
+  --chart-5: TODO(design);
+
+  --radius: TODO(design);
+
+  --duration-fast: TODO(design);
+  --duration-base: TODO(design);
+  --duration-slow: TODO(design);
+}
+
+/* ---------- Semantic layer: dark mode (decided on its own, not an inversion) ---------- */
+.dark {
+  --background: TODO(design);
+  --foreground: TODO(design);
+  --card: TODO(design);
+  --card-foreground: TODO(design);
+  --popover: TODO(design);
+  --popover-foreground: TODO(design);
+  --primary: TODO(design);
+  --primary-foreground: TODO(design);
+  --secondary: TODO(design);
+  --secondary-foreground: TODO(design);
+  --muted: TODO(design);
+  --muted-foreground: TODO(design);
+  --accent: TODO(design);
+  --accent-foreground: TODO(design);
+  --destructive: TODO(design);
+  --destructive-foreground: TODO(design);
+  --success: TODO(design);
+  --success-foreground: TODO(design);
+  --warning: TODO(design);
+  --warning-foreground: TODO(design);
+  --border: TODO(design);
+  --input: TODO(design);
+  --ring: TODO(design);
+  --chart-1: TODO(design);
+  --chart-2: TODO(design);
+  --chart-3: TODO(design);
+  --chart-4: TODO(design);
+  --chart-5: TODO(design);
+}
+
+/* ---------- Colors and radius mapped to Tailwind utilities ----------
+ * inline: the values reference :root / .dark variables that resolve at runtime, which keeps dark mode working.
+ * Optional: add --color-*: initial; to turn off Tailwind's default palette so bg-blue-500 is never generated.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ---------- Typefaces, type sizes, spacing, shadows, motion ----------
+ * Not inline: utilities reference these variables, so [data-density] overrides take effect.
+ */
+@theme {
+  --font-sans: TODO(design);
+  --font-display: TODO(design);
+  --font-mono: TODO(design);
+
+  --text-display: TODO(design);
+  --text-display--line-height: TODO(design);
+  --text-display--letter-spacing: TODO(design);
+  --text-display--font-weight: TODO(design);
+  --text-headline: TODO(design);
+  --text-headline--line-height: TODO(design);
+  --text-headline--font-weight: TODO(design);
+  --text-title: TODO(design);
+  --text-title--line-height: TODO(design);
+  --text-title--font-weight: TODO(design);
+  --text-body: TODO(design);
+  --text-body--line-height: TODO(design);
+  --text-body-sm: TODO(design);
+  --text-body-sm--line-height: TODO(design);
+  --text-label: TODO(design);
+  --text-label--line-height: TODO(design);
+  --text-label--font-weight: TODO(design);
+  --text-caption: TODO(design);
+  --text-caption--line-height: TODO(design);
+
+  /* Every spacing utility is a multiple of this: p-4 = calc(var(--spacing) * 4) */
+  --spacing: TODO(design);
+
+  --shadow-raised: TODO(design);
+  --shadow-overlay: TODO(design);
+  --shadow-modal: TODO(design);
+
+  --ease-standard: TODO(design);
+  --ease-emphasized: TODO(design);
+}
+
+/* ---------- Density: compact pages such as dashboards set data-density="compact" on a container ---------- */
+[data-density="compact"] {
+  --spacing: TODO(design);
+  --text-body: TODO(design);
+  --text-body--line-height: TODO(design);
+}
+
+/* ---------- Global base ---------- */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans text-body;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
