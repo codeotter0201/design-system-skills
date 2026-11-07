@@ -39,7 +39,7 @@ design-system-build ──▶ PRODUCT.md / DESIGN.md / tokens / components
 | Phase | What happens | Gate (your decision) |
 |---|---|---|
 | 1. Clarify | Write `PRODUCT.md`: product, users, brand personality, page types | G1: confirm the product |
-| 2. Explore | 2–3 clearly different visual directions, rendered with the same real content | G2: pick a direction |
+| 2. Explore | 2–3 directions grounded in the product's world, rendered on the same expressive and dense screens, scored on a rubric, then refined in rounds | G2: pick a direction |
 | 3. Systematize | Design tokens, `DESIGN.md`, base components and stories, checks installed | G3: confirm and freeze |
 | 4. Build pages | Pages composed only from existing components, following their page type | |
 | 5. Polish | Quality floor checklist, screenshots at several widths in light and dark mode | G4: accept the result |
@@ -160,7 +160,7 @@ Yes. `adopt` mode inventories what the code already does, turns it into tokens a
 skills/
   design-system-build/
     SKILL.md
-    references/    tokens, page types, components and Storybook, quality floor, adopting existing projects
+    references/    exploring directions, tokens, page types, components and Storybook, quality floor, adopting existing projects
     assets/        PRODUCT.md, DESIGN.md, tokens.css, agent-rules.md, Storybook templates, design-check.sh
   design-system-review/
     SKILL.md

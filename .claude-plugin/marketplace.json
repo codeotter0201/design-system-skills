@@ -8,7 +8,7 @@
       "name": "design-system-skills",
       "source": "./",
       "description": "Build, extend and review a project-specific design system (DESIGN.md, design tokens, Storybook) with any coding agent.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "category": "design",
       "keywords": ["design-system", "design-tokens", "storybook", "tailwindcss", "shadcn-ui", "ui-design", "frontend"]
     }

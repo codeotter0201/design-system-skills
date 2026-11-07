@@ -3,7 +3,7 @@ name: design-system-build
 description: Act as a UI/UX designer and frontend engineer to create, adopt, extend and update a project-specific design system. Clarifies the product, explores visual directions, freezes design tokens, builds shared components with Storybook, and builds pages by page type (landing page, blog, dashboard). Produces PRODUCT.md, DESIGN.md, a design tokens file, shared components and a check script. Use when starting a new frontend or UI project, setting up or adopting a design system, defining design tokens, adding a component, token or page type, changing brand values such as the primary color, radius or density, or building a page that must follow the design system.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # design-system-build
@@ -55,16 +55,17 @@ Check whether the project root has a `DESIGN.md`, a tokens file and a shared com
 
 ### Phase 2: Explore directions
 
-- From `PRODUCT.md`, propose 2–3 clearly different directions. For each one, write:
-  - A one-sentence concept and how it connects to this product
-  - 4–6 named colors (hex or oklch) with their roles
-  - Typefaces and their roles (one or two families; if two, make them clearly distinct)
-  - Shape language (radius, borders, depth)
-  - The signature element: the one thing people will remember
-  - A layout concept: a sentence or two, or an ASCII wireframe
-- Check each direction: "If this were a similar product, would I propose the same thing?" If yes, that part is a default, not a choice. Change it and say what you changed. Common defaults are listed in [references/quality-floor.md](references/quality-floor.md).
-- Render when you can: build a sample of each direction with the same real content (the hero or the most representative screen), take screenshots, and let the user compare them side by side.
-- **G2: the user picks one direction.** If they mix directions, write down which part comes from which.
+Follow [references/exploration.md](references/exploration.md). In short:
+
+1. Gather 10–15 concrete items from the product's world, and turn any references the user gives you into principles, never into copies.
+2. Spread 2–3 directions along the axes the brand personality leaves open; every pair differs on at least two axes, and one direction is a deliberate risk.
+3. Write a direction card for each (concept, axes, palette, typefaces, shape language, signature element, layout, motion, risks) and check it against the common defaults in [references/quality-floor.md](references/quality-floor.md).
+4. Render the same two touchstone screens for every direction, the most expressive and the most demanding, with identical real content, side by side.
+5. Score the directions on the rubric (fit, distinctiveness, range, legibility, feasibility, durability) and recommend one.
+
+**G2: the user picks one direction.** If they mix directions, write down which part comes from which.
+
+After G2, refine the chosen direction in two more rounds: first the open decisions, two variants at a time; then the details on the touchstone screens. Stop when a round changes only marginal things.
 
 ### Phase 3: Systematize and freeze
 
