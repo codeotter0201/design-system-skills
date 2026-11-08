@@ -1,4 +1,10 @@
 :root {
   --background: #ffffff;
   --primary: #2563eb;
+  --radius: 0.5rem;
+}
+@theme {
+  --font-sans: "Public Sans", sans-serif;
+  --text-body: 1rem;
+  --spacing: 0.25rem;
 }

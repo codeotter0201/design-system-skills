@@ -49,6 +49,6 @@ Report the results to the user as tables. This inventory is the basis for every 
 
 ## 6. Join the main process
 
-After migration, return to phase 3 in SKILL.md: install the checks, ask the user to confirm and freeze (G3), then continue with phases 4–6.
+After migration, return to phase 3 in SKILL.md: install the checks, ask the user to confirm and freeze (G3), then continue with phases 4–6. If the project has no `PRODUCT.md`, write it as in phase 1 first, inferring as much as possible from the existing product, because phase 3 needs its page types.
 
 If the user also wants a new visual direction, finish the migration and freeze the current state first, then change things one by one with the `update` process. Do not redesign during migration, or you will not be able to tell a migration bug from an intentional change.

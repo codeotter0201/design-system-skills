@@ -6,7 +6,7 @@ The commands below use `rg` (ripgrep); without it, use `grep -rnE`. Paths come f
 
 | Check | Command | What it catches |
 |---|---|---|
-| design-check | `scripts/design-check.sh` | Hex values and color functions outside the tokens file, Tailwind default palette classes, arbitrary values, leftover `TODO(design)`, colors that differ between `DESIGN.md` and the tokens file |
+| design-check | `scripts/design-check.sh` | Hex values and color functions outside the tokens file, Tailwind default palette classes, arbitrary values, leftover `TODO(design)`, colors, typography, radius and spacing that differ between `DESIGN.md` and the tokens file, spacing roles that are not multiples of the base |
 | DESIGN.md lint | `npx @google/design.md lint DESIGN.md` | Broken token references, contrast, section order, unreferenced colors |
 | DESIGN.md diff | See B below | Added, removed and modified tokens |
 | impeccable | `npx impeccable detect --json <path>` | Common AI-default styles, cramped spacing, skipped heading levels and more |
@@ -61,8 +61,13 @@ Run only when the tokens file or `DESIGN.md` changed.
 
 ## C. Documents ↔ tokens
 
-- Colors: `design-check.sh` compares `colors` in the `DESIGN.md` YAML with the same-named variables in `:root` of the tokens file.
-- Typography, radius and spacing: compare `typography`, `rounded` and `spacing` in the YAML with `--text-*`, `--radius-*` and `--spacing` in the tokens file by hand.
+- `design-check.sh` compares the YAML in `DESIGN.md` with the `:root` and `@theme` blocks of the tokens file:
+  - colors with `--<name>` (or `--color-<name>`)
+  - typography with `--text-<role>` and its line height, letter spacing and font weight; font families with the `--font-*` tokens
+  - `rounded` with `--radius-<step>`, resolving `var()` and simple `calc()`
+  - `spacing.base` with `--spacing`; other spacing roles with `--spacing-<role>` when it exists, otherwise as whole multiples of the base
+- Values it lists under "Not compared automatically" (for example `color-mix()`): compare by hand.
+- Dark mode: compare the Colors prose in `DESIGN.md` with the `.dark` block of the tokens file by hand.
 - Components: every component in the Components section of `DESIGN.md` exists in code, and every component in the shared components directory is listed in `DESIGN.md`.
 - Unused tokens: count the usages of every semantic token and report the ones with zero as info.
 

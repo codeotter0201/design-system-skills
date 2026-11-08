@@ -31,7 +31,7 @@ check() {
   echo "ok   $name"
 }
 
-check good 0 "design-check: passed"
+check good 0 "design-check: passed" "colors.muted cannot be compared automatically" "!differs"
 check bad 1 \
   "✗ No hex colors outside the tokens file (1)" \
   "✗ No color functions outside the tokens file (1)" \
@@ -39,7 +39,12 @@ check bad 1 \
   "✗ No Tailwind arbitrary values (1)" \
   "✗ No leftover TODO(design) (1)" \
   "colors.primary differs: DESIGN.md = #1d4ed8, tokens = #2563eb" \
-  "colors.accent has no --accent in :root of the tokens file" \
+  "colors.accent has no --accent in the tokens file" \
+  "✗ DESIGN.md values match the tokens file (6)" \
+  "typography.body.fontSize differs: DESIGN.md = 15px, tokens = 1rem" \
+  "typography.body.fontFamily \"Inter\" is not in any --font-* token" \
+  "rounded.lg has no --radius-lg in the tokens file" \
+  "spacing.field-gap (10px) is not a whole multiple of the spacing base (4px)" \
   "!colors.background" \
   "!#faq" \
   "!bg-[#fafafa]"

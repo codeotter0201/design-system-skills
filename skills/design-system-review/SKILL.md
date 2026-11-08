@@ -3,7 +3,7 @@ name: design-system-review
 description: Review UI code against the project's design system and keep the two in sync. Checks that code follows the design tokens, shared components and page type rules; that code was migrated after the design system changed; and that DESIGN.md matches the tokens file. Classifies every finding as a violation, a system gap or an outdated system, and reports with file and line evidence. Use when reviewing a pull request, branch or diff that touches UI, after design tokens or DESIGN.md change, before merging frontend work, or when asked to check design consistency, design drift, hardcoded colors or unused tokens.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # design-system-review
@@ -43,6 +43,14 @@ If there is no `DESIGN.md` or tokens file, stop and report that there is no syst
 5. **Classify every finding** as a violation, a system gap or an outdated system. See [references/triage.md](references/triage.md).
 6. **Report** in the format of [references/report.md](references/report.md).
 7. **Fix**: change code only when the user asks, and fix only violations automatically. System gaps and outdated systems become proposals; once the user approves, hand them to the `extend` or `update` process of `design-system-build`.
+
+## Done when
+
+- Every deterministic check in step 2 ran, or is listed under "Not checked" with the reason.
+- Directions A and C were checked; direction B was checked whenever the tokens file or `DESIGN.md` changed.
+- Every finding has a location, evidence, a basis, a type and a priority.
+- System proposals are listed apart from violations, and no code was changed beyond violations the user asked to fix.
+- The report follows [references/report.md](references/report.md), including "Not checked".
 
 ## Relationship to code review
 

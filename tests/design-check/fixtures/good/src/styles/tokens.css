@@ -7,7 +7,25 @@
   --foreground: var(--ref-ink-900);
   --primary: oklch(55% 0.18 250);
   --primary-foreground: #fff;
+  --muted: color-mix(in oklab, var(--foreground) 8%, var(--background));
+  --radius: 0.625rem;
 }
 .dark {
   --background: #111318;
+}
+@theme inline {
+  --color-brand: #0A7CFF;
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+@theme {
+  --font-sans: "Public Sans", ui-sans-serif, sans-serif;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+  --spacing: 0.25rem;
+}
+[data-density="compact"] {
+  --spacing: 0.2rem;
+  --text-body: 0.875rem;
 }

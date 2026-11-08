@@ -159,13 +159,16 @@
   --text-title--font-weight: TODO(design);
   --text-body: TODO(design);
   --text-body--line-height: TODO(design);
+  --text-body--font-weight: TODO(design);
   --text-body-sm: TODO(design);
   --text-body-sm--line-height: TODO(design);
+  --text-body-sm--font-weight: TODO(design);
   --text-label: TODO(design);
   --text-label--line-height: TODO(design);
   --text-label--font-weight: TODO(design);
   --text-caption: TODO(design);
   --text-caption--line-height: TODO(design);
+  --text-caption--font-weight: TODO(design);
 
   /* Every spacing utility is a multiple of this: p-4 = calc(var(--spacing) * 4) */
   --spacing: TODO(design);

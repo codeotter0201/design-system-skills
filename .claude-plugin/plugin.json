@@ -1,7 +1,7 @@
 {
   "name": "design-system-skills",
   "description": "Agent skills that work like a UI/UX designer and frontend engineer: build, extend and review a project-specific design system with DESIGN.md, design tokens, Tailwind CSS v4, shadcn/ui and Storybook, with page type rules for landing pages, blogs and dashboards.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "codeotter0201"
   },

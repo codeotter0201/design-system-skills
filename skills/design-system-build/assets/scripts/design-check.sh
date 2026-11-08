@@ -6,13 +6,15 @@
 #   2. Tailwind default palette classes (bg-blue-500, text-white, ...)
 #   3. Tailwind arbitrary values (p-[13px]; variants such as data-[state=open]: do not count)
 #   4. Leftover TODO(design) placeholders
-#   5. Colors in the DESIGN.md YAML that differ from the same-named variables in :root of the tokens file
+#   5. DESIGN.md YAML values that differ from the tokens file: colors, typography, rounded, spacing
+#      (spacing roles without their own token must be whole multiples of spacing.base)
 #
 # Usage
 #   scripts/design-check.sh [--src <dir>]... [--tokens <file>] [--design <file>] [--product <file>] [--warn-only]
 #   Defaults: --src src --tokens src/styles/tokens.css --design DESIGN.md --product PRODUCT.md
 #
 # To exempt a single line, add design-check-ignore to it with a reason.
+# The tokens file is read from :root and @theme blocks, one declaration per line.
 # Exit codes: 0 pass; 1 findings (0 with --warn-only); 2 bad arguments or paths.
 
 set -euo pipefail
@@ -24,7 +26,7 @@ PRODUCT="PRODUCT.md"
 WARN_ONLY=0
 
 usage() {
-  sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 while [ $# -gt 0 ]; do
@@ -89,6 +91,14 @@ report() {
   printf '%s\n' "$body" | cut -c1-220 | sed 's/^/    /'
 }
 
+# Informational lines: shown, but not counted as findings
+note() {
+  local title="$1" body="$2"
+  [ -z "$body" ] && return
+  printf 'ℹ %s\n' "$title"
+  printf '%s\n' "$body" | cut -c1-220 | sed 's/^/    /'
+}
+
 # 1. Hex colors and color functions
 HEX='(^|[^&0-9A-Za-z_])#[0-9A-Fa-f]{3,8}([^0-9A-Za-z_]|$)'
 COLOR_FN='(^|[^0-9A-Za-z_-])(rgba?|hsla?|hwb|oklch|oklab|lab|lch)\('
@@ -125,8 +135,9 @@ todo_hits() {
 }
 report "No leftover TODO(design)" "$(todo_hits)"
 
-# 5. DESIGN.md colors ↔ :root of the tokens file
-color_sync() {
+# 5. DESIGN.md YAML ↔ tokens file
+# Prints findings as plain lines and informational lines prefixed with "INFO ".
+value_sync() {
   if [ ! -f "$DESIGN" ]; then
     printf '%s not found (set it with --design)\n' "$DESIGN"
     return
@@ -146,26 +157,69 @@ color_sync() {
       sub(/[[:space:]]+#.*$/, "", s)
       return s
     }
-    function norm(s) {
+    function isnum(s) { return s ~ /^-?[0-9]*\.?[0-9]+$/ }
+    # A length in px, or "" when it is not a px or rem length
+    function topx(s) {
+      s = tolower(trim(s))
+      if (s ~ /^-?[0-9]*\.?[0-9]+px$/) return substr(s, 1, length(s) - 2) + 0
+      if (s ~ /^-?[0-9]*\.?[0-9]+rem$/) return (substr(s, 1, length(s) - 3) + 0) * 16
+      return ""
+    }
+    # Comparable form: px for px/rem lengths, fixed decimals for numbers, normalized text otherwise
+    function canon(s,   p, u, n) {
       s = tolower(trim(s)); gsub(/[[:space:]]+/, " ", s); gsub(/\( /, "(", s); gsub(/ \)/, ")", s)
       if (s ~ /^#[0-9a-f][0-9a-f][0-9a-f]$/) s = "#" substr(s,2,1) substr(s,2,1) substr(s,3,1) substr(s,3,1) substr(s,4,1) substr(s,4,1)
+      p = topx(s); if (p != "") return sprintf("%.4fpx", p)
+      if (isnum(s)) return sprintf("%.4f", s + 0)
+      if (s ~ /^-?[0-9]*\.?[0-9]+(em|%)$/) { u = s; sub(/^-?[0-9]*\.?[0-9]+/, "", u); n = substr(s, 1, length(s) - length(u)); return sprintf("%.4f", n + 0) u }
       return s
     }
-    function resolve(name,   v, i, ref) {
-      v = tok[name]
-      for (i = 0; i < 10; i++) {
-        if (v ~ /^var\(--[A-Za-z0-9_-]+\)$/) {
-          ref = substr(v, 7, length(v) - 7)
-          if (!(ref in tok)) return v
-          v = tok[ref]
-        } else break
+    # Replace var(--x) with the value of --x; "" when a reference cannot be resolved
+    function subst(v, depth,   s0, l0, ref, rv, guard) {
+      if (depth > 10) return ""
+      for (guard = 0; guard < 20 && match(v, /var\(--[A-Za-z0-9_-]+\)/); guard++) {
+        s0 = RSTART; l0 = RLENGTH
+        ref = substr(v, s0 + 6, l0 - 7)
+        if (!(ref in tok)) return ""
+        rv = subst(tok[ref], depth + 1)
+        if (rv == "") return ""
+        v = substr(v, 1, s0 - 1) rv substr(v, s0 + l0)
       }
       return v
     }
+    # Evaluate calc(a op b) for px/rem lengths; "" when it cannot be evaluated
+    function evalcalc(v,   inner, parts, n, pa, pb) {
+      v = trim(v)
+      if (v !~ /^calc\(.*\)$/) return v
+      inner = trim(substr(v, 6, length(v) - 6))
+      n = split(inner, parts, /[[:space:]]+/)
+      if (n != 3) return ""
+      pa = topx(parts[1]); pb = topx(parts[3])
+      if (parts[2] == "+" && pa != "" && pb != "") return (pa + pb) "px"
+      if (parts[2] == "-" && pa != "" && pb != "") return (pa - pb) "px"
+      if (parts[2] == "*" && pa != "" && isnum(parts[3])) return (pa * parts[3]) "px"
+      if (parts[2] == "*" && pb != "" && isnum(parts[1])) return (pb * parts[1]) "px"
+      if (parts[2] == "/" && pa != "" && isnum(parts[3]) && parts[3] + 0 != 0) return (pa / parts[3]) "px"
+      return ""
+    }
+    function value(name,   v) {
+      v = subst(tok[name], 0)
+      if (v == "") return ""
+      return evalcalc(v)
+    }
+    function compare(label, dv, tname,   tv) {
+      if (!(tname in tok)) { printf "%s: %s has no --%s in the tokens file\n", design, label, tname; return }
+      if (tok[tname] ~ /TODO\(design\)/) return
+      tv = value(tname)
+      if (tv == "" || tv ~ /var\(|calc\(|color-mix\(/) { printf "INFO %s: %s cannot be compared automatically (tokens value is %s)\n", design, label, tok[tname]; return }
+      if (canon(dv) != canon(tv)) printf "%s: %s differs: DESIGN.md = %s, tokens = %s\n", design, label, dv, tv
+    }
+
+    # Tokens file: :root and @theme blocks
     FILENAME != design {
-      if ($0 ~ /^[[:space:]]*:root[[:space:]]*\{/) { inroot = 1; next }
-      if (inroot && $0 ~ /\}/) { inroot = 0; next }
-      if (inroot && $0 ~ /^[[:space:]]*--[A-Za-z0-9_-]+[[:space:]]*:/) {
+      if ($0 ~ /^[[:space:]]*(:root|@theme)[^{]*\{/) { inblock = 1; next }
+      if (inblock && $0 ~ /\}/) { inblock = 0; next }
+      if (inblock && $0 ~ /^[[:space:]]*--[A-Za-z0-9_-]+[[:space:]]*:/) {
         line = $0; sub(/^[[:space:]]*--/, "", line)
         name = line; sub(/[[:space:]]*:.*/, "", name)
         val = line; sub(/^[^:]*:/, "", val); sub(/;.*$/, "", val)
@@ -173,32 +227,68 @@ color_sync() {
       }
       next
     }
+
+    # DESIGN.md: YAML front matter
     FNR == 1 && $0 == "---" { infm = 1; next }
     infm && $0 == "---" { infm = 0; next }
     infm {
-      if ($0 ~ /^colors:[[:space:]]*$/) { incolors = 1; next }
-      if (incolors && $0 ~ /^[^[:space:]#]/) incolors = 0
-      if (incolors && $0 ~ /^[[:space:]]+[A-Za-z0-9_-]+:/) {
-        line = trim($0)
-        name = line; sub(/:.*/, "", name)
-        val = line; sub(/^[^:]*:/, "", val)
-        dname[++n] = name; dval[n] = unquote(val)
+      if ($0 ~ /^[[:space:]]*(#.*)?$/) next
+      raw = $0; indent = match(raw, /[^ ]/) - 1
+      line = trim(raw)
+      key = line; sub(/:.*/, "", key)
+      val = line; sub(/^[^:]*:/, "", val); val = unquote(val)
+      if (indent == 0) { section = (val == "") ? key : ""; role = ""; next }
+      if (section == "colors" || section == "rounded" || section == "spacing") {
+        if (val != "") { dkey[++n] = section "." key; dval[n] = val }
+      } else if (section == "typography") {
+        if (indent <= 2) role = (val == "") ? key : ""
+        else if (role != "" && val != "") { dkey[++n] = "typography." role "." key; dval[n] = val }
       }
     }
+
     END {
+      base = ""
+      for (i = 1; i <= n; i++) if (dkey[i] == "spacing.base") base = dval[i]
+      if (base == "" && ("spacing" in tok)) base = value("spacing")
+
       for (i = 1; i <= n; i++) {
-        name = dname[i]; dv = dval[i]
+        k = dkey[i]; dv = dval[i]
         if (dv == "" || dv ~ /TODO\(design\)/) continue
-        if (!(name in tok)) { printf "%s: colors.%s has no --%s in :root of the tokens file\n", design, name, name; continue }
-        tv = resolve(name)
-        if (tv ~ /TODO\(design\)/) continue
-        if (tv ~ /var\(|calc\(|color-mix\(/) { printf "%s: colors.%s cannot be compared automatically (tokens value is %s)\n", design, name, tv; continue }
-        if (norm(dv) != norm(tv)) printf "%s: colors.%s differs: DESIGN.md = %s, tokens = %s\n", design, name, dv, tv
+        split(k, part, ".")
+        if (part[1] == "colors") {
+          name = part[2]
+          compare(k, dv, ((name in tok) || !(("color-" name) in tok)) ? name : "color-" name)
+        } else if (part[1] == "rounded") {
+          compare(k, dv, "radius-" part[2])
+        } else if (part[1] == "spacing") {
+          if (part[2] == "base") compare(k, dv, "spacing")
+          else if (("spacing-" part[2]) in tok) compare(k, dv, "spacing-" part[2])
+          else {
+            pv = topx(dv); pb = topx(base)
+            if (pv == "" || pb == "" || pb == 0) { printf "INFO %s: %s cannot be checked against the spacing base\n", design, k; continue }
+            r = pv / pb
+            if (r - int(r) > 0.0001 && int(r) + 1 - r > 0.0001) printf "%s: %s (%s) is not a whole multiple of the spacing base (%s)\n", design, k, dv, base
+          }
+        } else if (part[1] == "typography") {
+          role = part[2]; prop = part[3]
+          if (prop == "fontFamily") {
+            fam = dv; sub(/,.*/, "", fam); fam = unquote(fam)
+            found = 0
+            for (t in tok) if (t ~ /^font-/ && index(tolower(tok[t]), tolower(fam)) > 0) found = 1
+            if (!found) printf "%s: %s \"%s\" is not in any --font-* token\n", design, k, fam
+          }
+          else if (prop == "fontSize") compare(k, dv, "text-" role)
+          else if (prop == "lineHeight") compare(k, dv, "text-" role "--line-height")
+          else if (prop == "letterSpacing") compare(k, dv, "text-" role "--letter-spacing")
+          else if (prop == "fontWeight") compare(k, dv, "text-" role "--font-weight")
+        }
       }
     }
   ' "$TOKENS" "$DESIGN"
 }
-report "DESIGN.md colors match the tokens file" "$(color_sync)"
+SYNC="$(value_sync)"
+report "DESIGN.md values match the tokens file" "$(printf '%s\n' "$SYNC" | grep -v '^INFO ' || true)"
+note "Not compared automatically" "$(printf '%s\n' "$SYNC" | grep '^INFO ' | sed 's/^INFO //' || true)"
 
 echo
 if [ "$FINDINGS" -eq 0 ]; then

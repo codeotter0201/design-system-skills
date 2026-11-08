@@ -11,12 +11,19 @@ Works with Claude Code, OpenAI Codex, Cursor, Gemini CLI, GitHub Copilot, OpenCo
 
 Ask a coding agent for UI and you usually get the average of every project it has seen: the same typeface, the same gradient, the same rounded cards. Ask it again next week and it hardcodes a color your theme already defines, hand-builds a button your component library already has, and invents a fourth way to show an error. Nothing fails a build, so the drift piles up until someone fixes it by hand.
 
-design-system-skills gives the agent a designer's process instead of a designer's taste:
+design-system-skills gives the agent a designer's process instead of a designer's taste.
 
-- **Custom, not templated.** The skills define *how* to decide, never *what* to decide. No typeface, palette or layout is built in; every project gets its own visual direction.
-- **Consistent.** Design tokens are the single source of truth. Pages may only use tokens and shared components, and every change is reviewed against the system.
-- **Maintainable.** `DESIGN.md` mirrors the tokens and records the reasoning, so humans and agents read the same rules. A check script keeps the two in sync.
-- **Iterable.** Change one token and the whole product follows. Polish one component in Storybook and visual regression shows exactly what changed.
+## Goals and how they are met
+
+| Goal | How | Verified by |
+|---|---|---|
+| **Custom** | No typeface, palette or layout is built in. Directions come from the product's own world and are compared on the same screens. | The agent checks each direction against a list of common AI defaults; you choose at gate G2 |
+| **High quality** | Exploration works the main levers of quality (typography, tinted neutrals, rhythm, restraint), and every page passes a quality floor checklist. | Checklist and screenshots at three widths in light and dark mode; `impeccable detect` when installed; you accept at gate G4 |
+| **Consistent** | Pages use only semantic tokens and shared components, and follow their page type's rules. | `design-check.sh` catches hardcoded colors, default palette classes and arbitrary values; `design-system-review` judges component usage, rhythm and page type rules |
+| **Maintainable** | The tokens file is the single source of values, `DESIGN.md` mirrors it with the reasoning, and `AGENTS.md` gives every agent the same rules. | `design-check.sh` compares colors, typography, radius and spacing between `DESIGN.md` and the tokens file; `design.md lint` validates `DESIGN.md` |
+| **Iterable** | Change a token and the product follows; `extend` and `update` grow the system instead of adding exceptions. | Visual regression against committed Storybook baselines; you confirm expected changes |
+
+Every mode of `design-system-build` has a definition of done, and every run ends with a report of what was not verified.
 
 ## How it works
 
@@ -137,6 +144,14 @@ Used when available; without them, the skills explain how to do the same work by
 | [@google/design.md](https://github.com/google-labs-code/design.md) CLI | `lint`, `diff` and `export` for `DESIGN.md` |
 | [Playwright](https://playwright.dev) | Visual regression and screenshots |
 
+## What it does not guarantee
+
+- **Taste.** The process raises the floor and keeps choices deliberate; the ceiling depends on the decisions made at the gates.
+- **Visual verification without a renderer.** Screenshots need an agent that can run a browser. Without one, the agent reports the screens as not visually verified.
+- **Automatic checks for everything.** Values in `DESIGN.md` and the tokens file are compared automatically; component usage, rhythm in code, page type rules, copy and voice are judged by `design-system-review`.
+- **Your exact setup.** The templates assume Tailwind CSS v4 and shadcn/ui, and the Storybook and Playwright templates are starting points to adapt. Other stacks keep the process but need their own tokens file.
+- **A CI gate on its own.** `design-check.sh` exits non-zero on findings; add it to CI to enforce it.
+
 ## FAQ
 
 **Does it choose a visual style for me?**
@@ -146,7 +161,7 @@ No. It proposes 2–3 directions based on your product and you pick one. The tem
 They are the default stack for the templates. The process, layers and naming work with any stack; only the implementation of the tokens file changes.
 
 **How do DESIGN.md and the tokens stay in sync?**
-The tokens file is the single source of values and `DESIGN.md` mirrors it. `scripts/design-check.sh` compares the colors automatically, and `design-system-review` checks the rest on every change.
+The tokens file is the single source of values and `DESIGN.md` mirrors it. `scripts/design-check.sh` compares colors, typography, radius and spacing automatically, and `design-system-review` checks what a script cannot on every change.
 
 **What happens when the code needs something the system doesn't have?**
 The review classifies it as a system gap and writes a proposal. Once you approve it, `design-system-build` extends the system instead of adding a one-off style to a page.
