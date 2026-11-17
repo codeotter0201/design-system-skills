@@ -17,8 +17,8 @@ design-system-skills gives the agent a designer's process instead of a designer'
 
 | Goal | How | Verified by |
 |---|---|---|
-| **Custom** | No typeface, palette or layout is built in. Directions come from the product's own world and are compared on the same screens. | The agent checks each direction against a list of common AI defaults; you choose at gate G2 |
-| **High quality** | Exploration works the main levers of quality (typography, tinted neutrals, rhythm, restraint), and every page passes a quality floor checklist. | Checklist and screenshots at three widths in light and dark mode; `impeccable detect` when installed; you accept at gate G4 |
+| **Custom** | No typeface, palette or layout is built in. Directions come from the product's own world, are produced with a partner aesthetic skill, and are shown before anything is built. | The agent checks each direction against a list of common AI defaults; you choose at gate G2 |
+| **High quality** | `design-system-visual` hands the visual work to a skill built for it, a reviewer that did not build the screen reviews it, and every page passes a quality floor checklist. | Checklist and screenshots at three widths in light and dark mode; the partner skill's detector when it has one; you accept at gate G4 |
 | **Consistent** | Pages use only semantic tokens and shared components, and follow their page type's rules. | `design-check.sh` catches hardcoded colors, default palette classes and arbitrary values; `design-system-review` judges component usage, rhythm and page type rules |
 | **Maintainable** | The tokens file is the single source of values, `DESIGN.md` mirrors it with the reasoning, and `AGENTS.md` gives every agent the same rules. | `design-check.sh` compares colors, typography, radius and spacing between `DESIGN.md` and the tokens file; `design.md lint` validates `DESIGN.md` |
 | **Iterable** | Change a token and the product follows; `extend` and `update` grow the system instead of adding exceptions. | Visual regression against committed Storybook baselines; you confirm expected changes |
@@ -27,14 +27,18 @@ Every mode of `design-system-build` has a definition of done, and every run ends
 
 ## How it works
 
-Two skills form a loop:
+Three skills, one per role:
 
 | Skill | Role | What it does |
 |---|---|---|
-| [`design-system-build`](skills/design-system-build/SKILL.md) | Designer | Clarifies the product, explores visual directions, freezes design tokens, builds components with Storybook, builds pages by page type, and extends or updates the system |
+| [`design-system-build`](skills/design-system-build/SKILL.md) | Process owner | Clarifies the product, runs the gates, freezes design tokens, builds components with Storybook, builds pages by page type, and extends or updates the system |
+| [`design-system-visual`](skills/design-system-visual/SKILL.md) | Visual designer | Chooses a partner aesthetic skill with you, shows visual directions before building, designs the look of components and pages, and hands the chosen direction back to become tokens |
 | [`design-system-review`](skills/design-system-review/SKILL.md) | Gatekeeper and synchronizer | Reviews every change against the system and classifies each finding as a violation, a system gap or an outdated system |
 
 ```
+design-system-visual ◀── PRODUCT.md, touchstone screens
+         │
+         ▼  direction card, screens
 design-system-build ──▶ PRODUCT.md / DESIGN.md / tokens / components
          ▲                                │
          │                                ▼
@@ -46,7 +50,7 @@ design-system-build ──▶ PRODUCT.md / DESIGN.md / tokens / components
 | Phase | What happens | Gate (your decision) |
 |---|---|---|
 | 1. Clarify | Write `PRODUCT.md`: product, users, brand personality, page types | G1: confirm the product |
-| 2. Explore | 2–3 directions grounded in the product's world, rendered on the same expressive and dense screens, scored on a rubric, then refined in rounds | G2: pick a direction |
+| 2. Explore | `design-system-visual` shows 2–3 directions grounded in the product's world before building, then builds the expressive and the dense touchstone screens for the one you pick | G2: pick a direction |
 | 3. Systematize | Design tokens, `DESIGN.md`, base components and stories, checks installed | G3: confirm and freeze |
 | 4. Build pages | Pages composed only from existing components, following their page type | |
 | 5. Polish | Quality floor checklist, screenshots at several widths in light and dark mode | G4: accept the result |
@@ -100,7 +104,7 @@ The CLI detects your installed agents and asks where to install. Skills go into 
 
 ### Manually
 
-Copy (or symlink) `skills/design-system-build` and `skills/design-system-review` into your agent's skills directory:
+Copy (or symlink) `skills/design-system-build`, `skills/design-system-visual` and `skills/design-system-review` into your agent's skills directory:
 
 | Agent | Project | Global |
 |---|---|---|
@@ -118,6 +122,7 @@ Add this to the project's `AGENTS.md` (or whatever rules file the agent reads):
 
 ```markdown
 Before building any UI users will see, read <path>/skills/design-system-build/SKILL.md and follow its process.
+For visual directions and the look of components and pages, read <path>/skills/design-system-visual/SKILL.md.
 When reviewing UI changes, read <path>/skills/design-system-review/SKILL.md.
 ```
 
@@ -129,6 +134,8 @@ There are no commands to remember. Describe what you want and the agent loads th
 - "This project already has lots of pages. Adopt a design system without changing how anything looks."
 - "Build a strategy performance page following the dashboard rules."
 - "Make the primary color feel calmer."
+- "This landing page looks generic. Redesign it."
+- "Which design skill should we use for the visuals?"
 - "Review this pull request against the design system."
 - "Are DESIGN.md and the tokens out of sync?"
 
@@ -138,7 +145,7 @@ Used when available; without them, the skills explain how to do the same work by
 
 | Tool | Used for |
 |---|---|
-| [impeccable](https://github.com/pbakaus/impeccable) | Direction exploration, critique, audit, polish, and detecting common AI-default styles |
+| A partner aesthetic skill, such as [impeccable](https://github.com/pbakaus/impeccable) | Visual directions, critique, polish and detecting common AI-default styles. `design-system-visual` keeps the list of partners, proposes one and installs it only after you agree |
 | [shadcn/ui](https://ui.shadcn.com/docs/skills) skill and CLI | Base components |
 | [Storybook MCP](https://storybook.js.org/docs/ai/mcp/overview) | Letting agents read the component list, write stories and run tests |
 | [@google/design.md](https://github.com/google-labs-code/design.md) CLI | `lint`, `diff` and `export` for `DESIGN.md` |
@@ -146,7 +153,7 @@ Used when available; without them, the skills explain how to do the same work by
 
 ## What it does not guarantee
 
-- **Taste.** The process raises the floor and keeps choices deliberate; the ceiling depends on the decisions made at the gates.
+- **Taste.** The process raises the floor and keeps choices deliberate; the ceiling depends on the partner aesthetic skill, the references you give and the decisions made at the gates.
 - **Visual verification without a renderer.** Screenshots need an agent that can run a browser. Without one, the agent reports the screens as not visually verified.
 - **Automatic checks for everything.** Values in `DESIGN.md` and the tokens file are compared automatically; component usage, rhythm in code, page type rules, copy and voice are judged by `design-system-review`.
 - **Your exact setup.** The templates assume Tailwind CSS v4 and shadcn/ui, and the Storybook and Playwright templates are starting points to adapt. Other stacks keep the process but need their own tokens file.
@@ -155,7 +162,7 @@ Used when available; without them, the skills explain how to do the same work by
 ## FAQ
 
 **Does it choose a visual style for me?**
-No. It proposes 2–3 directions based on your product and you pick one. The templates contain only structure and `TODO(design)` placeholders, never default colors or fonts.
+No. `design-system-visual` shows 2–3 directions based on your product and you pick one. The templates contain only structure and `TODO(design)` placeholders, never default colors or fonts.
 
 **Do I need Tailwind CSS and shadcn/ui?**
 They are the default stack for the templates. The process, layers and naming work with any stack; only the implementation of the tokens file changes.
@@ -175,11 +182,15 @@ Yes. `adopt` mode inventories what the code already does, turns it into tokens a
 skills/
   design-system-build/
     SKILL.md
-    references/    exploring directions, tokens, page types, components and Storybook, quality floor, adopting existing projects
+    references/    tokens, page types, components and Storybook, quality floor, adopting existing projects
     assets/        PRODUCT.md, DESIGN.md, tokens.css, agent-rules.md, Storybook templates, design-check.sh
+  design-system-visual/
+    SKILL.md
+    references/    partner skills (choice by need, comparison, freshness, discovery), trial procedure, hand-off, exploring directions by hand, common defaults
   design-system-review/
     SKILL.md
     references/    checks, classifying findings, report format
+agents/              visual-designer agent for the Claude Code plugin
 tests/design-check/  regression tests for design-check.sh
 scripts/             validation for this repository
 .claude-plugin/      Claude Code plugin and marketplace manifests

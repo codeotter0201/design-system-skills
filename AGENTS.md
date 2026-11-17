@@ -4,10 +4,13 @@ For agents and developers maintaining this repository.
 
 ## What this repository is
 
-Two skills in the [Agent Skills](https://agentskills.io/specification) format:
+Three skills in the [Agent Skills](https://agentskills.io/specification) format, one per role:
 
-- `skills/design-system-build`: creates, adopts, extends and updates a design system, and builds pages by page type.
-- `skills/design-system-review`: reviews UI changes against the design system and keeps the two in sync.
+- `skills/design-system-build`: the process owner. Creates, adopts, extends and updates a design system, runs the gates, and builds pages by page type.
+- `skills/design-system-visual`: the visual designer. Produces directions and the look of components and pages with a partner aesthetic skill, and hands the result back to `design-system-build`.
+- `skills/design-system-review`: the gatekeeper. Reviews UI changes against the design system and keeps the two in sync.
+
+`agents/visual-designer.md` is an agent definition shipped with the plugin. It only points at `design-system-visual`; rules live in the skills.
 
 ## Editing rules
 
@@ -25,7 +28,9 @@ Two skills in the [Agent Skills](https://agentskills.io/specification) format:
 - Do not name tools from a particular agent harness (such as a specific Read or Edit tool); any agent must be able to follow the instructions. External tools are always optional: "use it when available; otherwise do this by hand".
 - Templates contain only structure and `TODO(design)` placeholders, never aesthetic defaults (typefaces, palettes, radius values).
 - Documents describe the current state only. No "previously…" notes or version comparisons; history lives in git.
-- Both skills must describe shared concepts the same way (path conventions, the `TODO(design)` marker, how findings are classified). When you change one, search the other for the same content.
+- All skills must describe shared concepts the same way (path conventions, the `TODO(design)` marker, the gates, how findings are classified). When you change one, search the others for the same content.
+- The Common defaults list exists twice, in `design-system-build/references/quality-floor.md` and `design-system-visual/references/common-defaults.md`, because each skill is installed on its own. Change both together.
+- Partner aesthetic skills are listed only in `design-system-visual/references/partners.md`. Other files name the role, not a partner; the review's list of deterministic checks may name a tool it runs. Mark an entry as trialed only after running it by `design-system-visual/references/trial.md`, and record the version and date.
 
 ### design-check.sh
 

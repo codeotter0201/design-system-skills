@@ -1,6 +1,6 @@
 # Exploring visual directions
 
-How to run phase 2: from `PRODUCT.md` to a direction the user has chosen and refined, ready to become tokens in phase 3. The goal is a direction that could only belong to this product, tested on screens hard enough to show whether it holds up.
+The by-hand method for exploring directions, used when no partner skill from [partners.md](partners.md) is available: from `PRODUCT.md` to a direction the user has chosen and refined, ready to become tokens in phase 3 of `design-system-build`. The goal is a direction that could only belong to this product, tested on screens hard enough to show whether it holds up.
 
 ## 1. Gather material from the product's world
 
@@ -51,7 +51,7 @@ Without axes, "three directions" tends to become one layout in three palettes.
 | Motion | What moves, and when |
 | Risks | What could go wrong with this direction |
 
-Then check every card against the common defaults in [quality-floor.md](quality-floor.md) and the swap test: "If this were a similar product, would I propose the same thing?" Change any part that is a default rather than a choice, and say what you changed.
+Then check every card against [common-defaults.md](common-defaults.md) and the swap test: "If this were a similar product, would I propose the same thing?" Change any part that is a default rather than a choice, and say what you changed.
 
 ## 5. Render touchstone screens
 
@@ -124,7 +124,6 @@ Most perceived quality comes from a few levers. Work them deliberately in rounds
 - Turn rejected options into Do's and Don'ts only when they make a useful rule ("Don't use pure gray backgrounds; neutrals are tinted from the brand hue"). Do not record the exploration history in `DESIGN.md`.
 - Rebuild the touchstone screens with the frozen tokens and use them as the first visual check of the system.
 
-## Optional tools
+## Partner skills
 
-- impeccable: `shape` before code; `bolder`, `quieter`, `colorize`, `typeset` and `layout` to steer variants in rounds 2 and 3; `critique` as a second opinion on the rubric; `live` to cycle variants of one element in the browser.
-- A browser or screenshot tool to present the directions side by side.
+A partner skill replaces steps 1 to 8 with its own method; step 9 and the hand-off in [handoff.md](handoff.md) stay the same. See [partners.md](partners.md).
