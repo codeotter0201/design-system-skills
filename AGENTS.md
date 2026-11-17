@@ -10,8 +10,6 @@ Three skills in the [Agent Skills](https://agentskills.io/specification) format,
 - `skills/design-system-visual`: the visual designer. Produces directions and the look of components and pages with a partner aesthetic skill, and hands the result back to `design-system-build`.
 - `skills/design-system-review`: the gatekeeper. Reviews UI changes against the design system and keeps the two in sync.
 
-`agents/visual-designer.md` is an agent definition shipped with the plugin. It only points at `design-system-visual`; rules live in the skills.
-
 ## Editing rules
 
 ### Skill format

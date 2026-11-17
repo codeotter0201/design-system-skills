@@ -75,27 +75,18 @@ Whatever the partner, three things hold:
 
 ### 5. Review with fresh eyes
 
-Whoever built a screen cannot judge it. Use the partner's review step when it has one, run by a reviewer that has not seen the build conversation. Otherwise step out of the build context and review from the screenshots alone against the brief and [references/common-defaults.md](references/common-defaults.md).
+Whoever built a screen cannot judge it. Use the partner's review step when it has one. When a sub-agent is available, start a new one that has not seen the build and give it only the screenshots, the brief and [references/common-defaults.md](references/common-defaults.md). Otherwise step out of the build context, review from the screenshots alone against the brief and [references/common-defaults.md](references/common-defaults.md), and say in the report that the reviewer saw the build.
 
 ### 6. Hand back
 
 Return the outputs in [references/handoff.md](references/handoff.md) to `design-system-build`, which turns the direction into tokens and `DESIGN.md` in phase 3. Report what was not verified.
-
-## When run as a sub-agent
-
-A sub-agent runs once and returns; it cannot wait for the user's answer. When this skill runs as one:
-
-- Every decision that needs the user goes back to the caller: choosing or installing a partner, gate G2, accepting the result. Return the options with their evidence and stop; the caller asks the user and calls again with the answer.
-- Directions are returned as cheap evidence; the touchstone screens are built in a later run, for the direction the user chose.
-- The fresh-eyes review of step 5 is a separate run by a reviewer that did not build the screens, given only the screenshots, the brief and [references/common-defaults.md](references/common-defaults.md).
-- Return the hand-off package as far as the run got, including what was not verified.
 
 ## Done when
 
 - The partner was chosen by need, the freshness of its entry was checked, and the user chose it or declined; the choice is recorded.
 - The user saw directions before anything was built, and chose one.
 - The two touchstone screens exist for the chosen direction and were looked at rendered, at three widths, in light and dark mode when the product has both.
-- A reviewer that did not build the screens reviewed them, or the report says none did.
+- A reviewer that has not seen the build reviewed the screens, or the report says the reviewer saw the build.
 - The hand-off package is complete, including the list of what was not verified.
 - Nothing was installed, downloaded or sent without the user's yes.
 

@@ -45,7 +45,7 @@ One per direction shown, and a final one for the direction chosen.
 
 ### Review
 
-- Who reviewed the screens, and that they did not build them.
+- Who reviewed the screens, and whether they had seen the build.
 - Findings fixed, and findings left open.
 
 ### Not verified

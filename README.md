@@ -58,12 +58,6 @@ design-system-build ──▶ PRODUCT.md / DESIGN.md / tokens / components
 
 Existing projects use `adopt` mode: inventory the values already in use, consolidate them into tokens, extract shared components, migrate with zero visual change, then freeze.
 
-### The visual-designer agent
-
-The Claude Code plugin ships one agent, `visual-designer`. The main agent delegates to it when the task is exploring or replacing a visual direction, designing the look of a component or page, or a UI looks generic; you can also ask for it by name. It follows `design-system-visual` and returns its work: decisions (installing a partner, choosing a direction at G2, accepting at G4) stay in the main conversation, and a separate run that did not build the screens reviews them.
-
-The agent comes only with the plugin install. `npx skills add` and copying by hand install the skills only; the skills work the same without the agent.
-
 ## What it generates in your project
 
 | File | Contents |
@@ -197,7 +191,6 @@ skills/
   design-system-review/
     SKILL.md
     references/    checks, classifying findings, report format
-agents/              visual-designer agent for the Claude Code plugin
 tests/design-check/  regression tests for design-check.sh
 scripts/             validation for this repository
 .claude-plugin/      Claude Code plugin and marketplace manifests
