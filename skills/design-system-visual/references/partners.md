@@ -66,7 +66,7 @@ A style request ("brutalist", "glassmorphism", "like a printed annual report") p
 An entry is **out of date** when any of these holds:
 
 - The installed version differs from the verified version in its major or minor number (4.9.x against 4.10.0, or against 5.0.0). A patch difference does not count.
-- The verified date is more than 90 days before today.
+- The verified date is more than 90 days before today (this repository's working threshold).
 - The partner's install command or source has changed from what the entry records.
 - The entry records no verified version, and the partner is installed or about to be.
 
@@ -96,7 +96,7 @@ Look for new candidates when the default is out of date, when no listed partner 
 
 | Criterion | A candidate worth trialing |
 |---|---|
-| Maintained | Changed recently, within about the last 90 days |
+| Maintained | Changed within about the last 90 days (this repository's working threshold) |
 | License | A clear license that permits the project's use |
 | Transparency | States what it installs, what programs it runs, what it writes to the project and home directory, and what it sends |
 | Method | Has a method for choosing a direction from the product and its users, not only a catalog of styles |

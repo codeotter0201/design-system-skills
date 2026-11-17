@@ -40,7 +40,7 @@ One per direction shown, and a final one for the direction chosen.
 ### Touchstone screens
 
 - The two screens, rendered, for the chosen direction.
-- Screenshots at 375, 768 and 1280 px.
+- Screenshots at 375, 768 and 1280 px, in light and dark mode when the product has both.
 - The content used, with synthetic data labeled as synthetic.
 
 ### Review

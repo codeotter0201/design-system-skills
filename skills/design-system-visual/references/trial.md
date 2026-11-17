@@ -52,7 +52,7 @@ For each partner, in its own branch, worktree or copy:
 
 ## 5. Score from the rendered screenshots
 
-Judge only from the screenshots, never from the code or the partner's own description. When comparing several partners, label the screenshot sets A, B, C without partner names until the user has decided.
+Score with this repository's own rubric below. Judge only from the screenshots, never from the code or the partner's own description. When comparing several partners, label the screenshot sets A, B, C without partner names until the user has decided.
 
 | Criterion | 0 | 1 | 2 |
 |---|---|---|---|

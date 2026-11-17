@@ -134,11 +134,12 @@ After G2, build the same two touchstone screens for the chosen direction and ref
 ## Update
 
 1. List the tokens to change, their new values and the reason.
-2. Find every usage: the CSS variable, the matching utility classes, and the components that reference it.
-3. If visual regression tests exist, make sure the baseline screenshots are current.
-4. Change the tokens file and `DESIGN.md` together.
-5. Run `scripts/design-check.sh`, `design.md lint` and the visual regression tests. Show the user the expected visual changes for confirmation and fix the unexpected ones. Update the baselines only after confirmation.
-6. Do not write a changelog inside `DESIGN.md`; describe the change in the commit and pull request.
+2. When the change is a visual judgment (for example making a color feel calmer), ask `design-system-visual` for the new values and show the user the options before changing tokens. This skill still changes the tokens file and `DESIGN.md` together.
+3. Find every usage: the CSS variable, the matching utility classes, and the components that reference it.
+4. If visual regression tests exist, make sure the baseline screenshots are current.
+5. Change the tokens file and `DESIGN.md` together.
+6. Run `scripts/design-check.sh`, `design.md lint` and the visual regression tests. Show the user the expected visual changes for confirmation and fix the unexpected ones. Update the baselines only after confirmation.
+7. Do not write a changelog inside `DESIGN.md`; describe the change in the commit and pull request.
 
 ## Definition of done
 

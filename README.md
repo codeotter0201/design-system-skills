@@ -58,6 +58,12 @@ design-system-build ──▶ PRODUCT.md / DESIGN.md / tokens / components
 
 Existing projects use `adopt` mode: inventory the values already in use, consolidate them into tokens, extract shared components, migrate with zero visual change, then freeze.
 
+### The visual-designer agent
+
+The Claude Code plugin ships one agent, `visual-designer`. The main agent delegates to it when the task is exploring or replacing a visual direction, designing the look of a component or page, or a UI looks generic; you can also ask for it by name. It follows `design-system-visual` and returns its work: decisions (installing a partner, choosing a direction at G2, accepting at G4) stay in the main conversation, and a separate run that did not build the screens reviews them.
+
+The agent comes only with the plugin install. `npx skills add` and copying by hand install the skills only; the skills work the same without the agent.
+
 ## What it generates in your project
 
 | File | Contents |
@@ -157,6 +163,7 @@ Used when available; without them, the skills explain how to do the same work by
 - **Visual verification without a renderer.** Screenshots need an agent that can run a browser. Without one, the agent reports the screens as not visually verified.
 - **Automatic checks for everything.** Values in `DESIGN.md` and the tokens file are compared automatically; component usage, rhythm in code, page type rules, copy and voice are judged by `design-system-review`.
 - **Your exact setup.** The templates assume Tailwind CSS v4 and shadcn/ui, and the Storybook and Playwright templates are starting points to adapt. Other stacks keep the process but need their own tokens file.
+- **Proven partners for every need.** The partner list is trialed for one need so far: impeccable, on one landing-page brief. Working screens such as dashboards and forms have no trialed partner; see [partners.md](skills/design-system-visual/references/partners.md). Entries expire by its freshness rule (a version change, or 90 days after the trial date) and must be re-trialed to stay recommended.
 - **A CI gate on its own.** `design-check.sh` exits non-zero on findings; add it to CI to enforce it.
 
 ## FAQ

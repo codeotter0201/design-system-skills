@@ -21,6 +21,8 @@ AI-generated interfaces keep landing on the combinations below. None of them is 
 - Every section fading and sliding up on entrance, every card animating on hover
 - Gray text on a colored background
 
+This list matches `design-system-visual/references/common-defaults.md`.
+
 ## Checklist
 
 ### Layout

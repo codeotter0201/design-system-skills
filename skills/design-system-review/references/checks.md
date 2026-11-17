@@ -9,7 +9,7 @@ The commands below use `rg` (ripgrep); without it, use `grep -rnE`. Paths come f
 | design-check | `scripts/design-check.sh` | Hex values and color functions outside the tokens file, Tailwind default palette classes, arbitrary values, leftover `TODO(design)`, colors, typography, radius and spacing that differ between `DESIGN.md` and the tokens file, spacing roles that are not multiples of the base |
 | DESIGN.md lint | `npx @google/design.md lint DESIGN.md` | Broken token references, contrast, section order, unreferenced colors |
 | DESIGN.md diff | See B below | Added, removed and modified tokens |
-| impeccable | `npx impeccable detect --json <path>` | Common AI-default styles, cramped spacing, skipped heading levels and more |
+| Partner detector | The detector of the visual partner skill recorded in `AGENTS.md`, when it has one (for example `npx impeccable detect --json <path>`) | Common AI-default styles and other generated-UI patterns the partner knows |
 | Visual regression | `npx playwright test visual.spec.ts` | Story screenshots that differ from the baseline |
 
 If the project has no `scripts/design-check.sh`, at least search by hand:

@@ -31,6 +31,7 @@ Three skills in the [Agent Skills](https://agentskills.io/specification) format,
 - All skills must describe shared concepts the same way (path conventions, the `TODO(design)` marker, the gates, how findings are classified). When you change one, search the others for the same content.
 - The Common defaults list exists twice, in `design-system-build/references/quality-floor.md` and `design-system-visual/references/common-defaults.md`, because each skill is installed on its own. Change both together.
 - Partner aesthetic skills are listed only in `design-system-visual/references/partners.md`. Other files name the role, not a partner; the review's list of deterministic checks may name a tool it runs. Mark an entry as trialed only after running it by `design-system-visual/references/trial.md`, and record the version and date.
+- Partner entries expire by the freshness rule in `partners.md`: a minor or major version change, or 90 days after the trial date (this repository's working threshold). Re-trial an expired entry by `trial.md` to keep it recommended; until then it counts as not trialed.
 
 ### design-check.sh
 
