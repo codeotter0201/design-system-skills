@@ -19,6 +19,9 @@ The UI of this project is governed by a design system. Before writing any code u
 - Stories: `*.stories.tsx` next to each component
 - Check script: `scripts/design-check.sh`
 - Visual regression: `TODO(design)` (for example `tests/visual.spec.ts`)
+- Visual partner skill: `TODO(design)` (the partner chosen with `design-system-visual`, or `none`)
+  - Version: `TODO(design)` (the installed version when it was chosen)
+  - Need: `TODO(design)` (the need it was chosen for, as named in `design-system-visual`)
 
 ### Rules
 
@@ -29,4 +32,4 @@ The UI of this project is governed by a design system. Before writing any code u
 5. When tokens change, update `DESIGN.md` too. Values that differ between the two are errors.
 6. `DESIGN.md` describes the current state only; describe changes in commits and pull requests.
 7. Run `scripts/design-check.sh` before committing.
-8. When the `design-system-build` and `design-system-review` skills are available, use the first to build UI and the second to review changes.
+8. When the `design-system-build`, `design-system-visual` and `design-system-review` skills are available, use the first to run the process and build UI, the second for visual directions and the look of components and pages, and the third to review changes.

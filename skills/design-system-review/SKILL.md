@@ -1,18 +1,18 @@
 ---
 name: design-system-review
-description: Review UI code against the project's design system and keep the two in sync. Checks that code follows the design tokens, shared components and page type rules; that code was migrated after the design system changed; and that DESIGN.md matches the tokens file. Classifies every finding as a violation, a system gap or an outdated system, and reports with file and line evidence. Use when reviewing a pull request, branch or diff that touches UI, after design tokens or DESIGN.md change, before merging frontend work, or when asked to check design consistency, design drift, hardcoded colors or unused tokens.
+description: Review UI code against the project's design system and keep the two in sync. Checks that code follows the design tokens, shared components and page type rules; that code was migrated after the design system changed; and that DESIGN.md matches the tokens file. Classifies every finding as a violation, a system gap or an outdated system, and reports with file and line evidence. Use when reviewing a pull request, branch or diff that touches UI, after design tokens or DESIGN.md change, before merging frontend work, or when asked to check design consistency, design drift, hardcoded colors or unused tokens. Visual critique of the system itself is routed to design-system-visual and reported as system proposals.
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # design-system-review
 
-The gatekeeper and synchronizer. This skill does not design: when the system itself needs to change, it writes a proposal and hands it back to `design-system-build`.
+The gatekeeper and synchronizer. This skill does not design: when the system itself needs to change, it writes a proposal and hands it back to `design-system-build`. When the question is whether the system looks good, not whether the code follows it, it asks `design-system-visual` for a visual critique and lists the result as system proposals.
 
 ## Principles
 
-- **Review against this project's system, not personal taste.** Opinions about the system itself become system proposals, not violations.
+- **Review against this project's system, not personal taste.** Opinions about the system itself become system proposals, not violations. A visual critique from `design-system-visual` is reported the same way.
 - **Deterministic checks come first.** Run tools for everything a tool can decide; judgment covers only what tools cannot. When the two disagree, explain why.
 - **Every finding has evidence:** `file:line`, what the code does, and the basis (the `DESIGN.md` section or token).
 - **Say what was not checked.** For example, Storybook would not start or screenshots were not possible. Silence is never a pass.
@@ -33,7 +33,7 @@ If there is no `DESIGN.md` or tokens file, stop and report that there is no syst
    - `scripts/design-check.sh`
    - The project's lint and type check
    - `npx @google/design.md lint DESIGN.md`; when `DESIGN.md` changed, also `design.md diff` against the previous version
-   - `npx impeccable detect` (when installed)
+   - The detector of the visual partner skill recorded in `AGENTS.md`, when it has one (for example `npx impeccable detect --json <path>`)
    - Storybook build and visual regression tests
 3. **Check sync in three directions** ([references/checks.md](references/checks.md)):
    - A. Code → rules: does new code follow the system?

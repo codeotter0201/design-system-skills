@@ -15,7 +15,7 @@ Use the structure below. Write "None" in sections with no content instead of del
 | design-check.sh | Pass / N findings / Not run (reason) |
 | DESIGN.md lint | Pass / N errors, M warnings / Not run (reason) |
 | DESIGN.md diff | No changes / a added, b removed, c modified / Not run (reason) |
-| impeccable detect | Pass / N findings / Not installed |
+| Partner detector | Pass / N findings / No partner detector / Not run (reason) |
 | Visual regression | Pass / N stories differ / Not run (reason) |
 
 ### To fix (violations)

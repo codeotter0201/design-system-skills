@@ -1,14 +1,16 @@
 ---
 name: design-system-build
-description: Act as a UI/UX designer and frontend engineer to create, adopt, extend and update a project-specific design system. Clarifies the product, explores visual directions, freezes design tokens, builds shared components with Storybook, and builds pages by page type (landing page, blog, dashboard). Produces PRODUCT.md, DESIGN.md, a design tokens file, shared components and a check script. Use when starting a new frontend or UI project, setting up or adopting a design system, defining design tokens, adding a component, token or page type, changing brand values such as the primary color, radius or density, or building a page that must follow the design system.
+description: Act as the process owner of a project-specific design system, as a UI/UX designer and frontend engineer would, to create, adopt, extend and update it. Clarifies the product, runs the gates, hands visual directions to design-system-visual, freezes design tokens, builds shared components with Storybook, and builds pages by page type (landing page, blog, dashboard). Produces PRODUCT.md, DESIGN.md, a design tokens file, shared components and a check script. Use when starting a new frontend or UI project, setting up or adopting a design system, defining design tokens, adding a component, token or page type, changing brand values such as the primary color, radius or density, or building a page that must follow the design system.
 license: MIT
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # design-system-build
 
-Work as a UI/UX designer and frontend engineer: follow a fixed process to create a design system that belongs to this project, then build pages with it.
+Work as the process owner: follow a fixed process to create a design system that belongs to this project, then build pages with it.
+
+Three skills share the work. This skill owns the process, the gates, the tokens, the component rules and the checks. `design-system-visual` owns how the product looks. `design-system-review` owns consistency.
 
 ## Core principles
 
@@ -25,8 +27,8 @@ Each goal is met by specific mechanisms and verified in a specific way. In the f
 
 | Goal | Met by | Verified by |
 |---|---|---|
-| Custom | No built-in aesthetics; directions grounded in the product's world ([references/exploration.md](references/exploration.md)) | Swap test and the common defaults list (judgment); the user at G2 |
-| High quality | The levers of quality in exploration; the quality floor ([references/quality-floor.md](references/quality-floor.md)) | Quality floor checklist and screenshots (judgment); `impeccable detect` when available; the user at G4 |
+| Custom | No built-in aesthetics; directions grounded in the product's world, produced by `design-system-visual` | Swap test and the common defaults list (judgment); the user at G2 |
+| High quality | The visual work of `design-system-visual` and its partner skill; the quality floor ([references/quality-floor.md](references/quality-floor.md)) | Quality floor checklist and screenshots (judgment); a review by someone who did not build the screen; the partner skill's detector when it has one; the user at G4 |
 | Consistent | Semantic tokens and shared components only; page type rules | `scripts/design-check.sh` (tool); `design-system-review` (judgment) |
 | Maintainable | The tokens file as the single source; `DESIGN.md` as its mirror; rules in `AGENTS.md` | `scripts/design-check.sh` compares colors, typography, radius and spacing; `design.md lint` |
 | Iterable | The `extend` and `update` processes; Storybook; visual regression | Visual regression against the committed baseline (tool); the user confirms expected changes |
@@ -74,17 +76,19 @@ Check whether the project root has a `DESIGN.md`, a tokens file and a shared com
 
 ### Phase 2: Explore directions
 
-Follow [references/exploration.md](references/exploration.md). In short:
+Hand this phase to `design-system-visual`. Give it `PRODUCT.md` and name the two touchstone screens: the most expressive one and the most demanding one. It chooses a partner skill with the user, shows directions before building anything, and returns a direction card, the two touchstone screens and a list of what was not verified.
+
+When `design-system-visual` is not installed, do the same work by hand:
 
 1. Gather 10–15 concrete items from the product's world, and turn any references the user gives you into principles, never into copies.
 2. Spread 2–3 directions along the axes the brand personality leaves open; every pair differs on at least two axes, and one direction is a deliberate risk.
-3. Write a direction card for each (concept, axes, palette, typefaces, shape language, signature element, layout, motion, risks) and check it against the common defaults in [references/quality-floor.md](references/quality-floor.md).
-4. Render the same two touchstone screens for every direction, the most expressive and the most demanding, with identical real content, side by side.
-5. Score the directions on the rubric (fit, distinctiveness, range, legibility, feasibility, durability) and recommend one.
+3. Write a direction card for each (concept, palette, typefaces, shape language, signature element, layout, motion, risks) and check it against the common defaults in [references/quality-floor.md](references/quality-floor.md).
+4. Show every direction as a first-viewport sketch or static screen with identical real content before building anything.
+5. Score the directions (fit, distinctiveness, range, legibility, feasibility, durability) and recommend one.
 
 **G2: the user picks one direction.** If they mix directions, write down which part comes from which.
 
-After G2, refine the chosen direction in two more rounds: first the open decisions, two variants at a time; then the details on the touchstone screens. Stop when a round changes only marginal things.
+After G2, build the same two touchstone screens for the chosen direction and refine them in rounds. Stop when a round changes only marginal things.
 
 ### Phase 3: Systematize and freeze
 
@@ -103,6 +107,7 @@ After G2, refine the chosen direction in two more rounds: first the open decisio
 
 - Decide which page type the page belongs to. Read that page type in the Page Types section of `DESIGN.md` and in [references/page-types.md](references/page-types.md).
 - Compose screens only from existing components. If a component is missing, follow "Extend"; do not hand-style it inside the page.
+- For the composition of an expressive page, such as a landing page, ask `design-system-visual`; it designs inside the frozen tokens and components.
 - Use real content. If none exists, write copy and data that match the real situation; never use lorem ipsum.
 - Every data region needs loading, empty and error states.
 
@@ -110,7 +115,7 @@ After G2, refine the chosen direction in two more rounds: first the open decisio
 
 - Go through [references/quality-floor.md](references/quality-floor.md) item by item.
 - Take screenshots at 375, 768 and 1280 px wide, in both light and dark mode. Critique hierarchy, rhythm and alignment, and check that the signature element appears only where it should.
-- If impeccable is available, run `critique`, `audit` and `polish` on specific regions.
+- For visual critique and polish, ask `design-system-visual`; it uses its partner skill and a reviewer that did not build the screen.
 - **G4: the user accepts the result.**
 
 ### Phase 6: Hand off to review
@@ -120,7 +125,7 @@ After G2, refine the chosen direction in two more rounds: first the open decisio
 ## Extend
 
 1. State the need: what problem it solves, which existing component comes closest, and why that is not enough.
-2. Try to compose existing components first; add something new only when composition cannot work. Two things are the same component when their purpose and behavior match, even if they look different.
+2. Try to compose existing components first; add something new only when composition cannot work. For the look of a new component, ask `design-system-visual`. Two things are the same component when their purpose and behavior match, even if they look different.
 3. New component: semantic tokens only, every applicable state, stories, and an entry in the Components section of `DESIGN.md`.
 4. New token: confirm the semantic layer really lacks it, then add it to both the tokens file and `DESIGN.md`.
 5. New page type: add a row to `PRODUCT.md` and a section to Page Types in `DESIGN.md`, using the fields in [references/page-types.md](references/page-types.md).
@@ -129,11 +134,12 @@ After G2, refine the chosen direction in two more rounds: first the open decisio
 ## Update
 
 1. List the tokens to change, their new values and the reason.
-2. Find every usage: the CSS variable, the matching utility classes, and the components that reference it.
-3. If visual regression tests exist, make sure the baseline screenshots are current.
-4. Change the tokens file and `DESIGN.md` together.
-5. Run `scripts/design-check.sh`, `design.md lint` and the visual regression tests. Show the user the expected visual changes for confirmation and fix the unexpected ones. Update the baselines only after confirmation.
-6. Do not write a changelog inside `DESIGN.md`; describe the change in the commit and pull request.
+2. When the change is a visual judgment (for example making a color feel calmer), ask `design-system-visual` for the new values and show the user the options before changing tokens. This skill still changes the tokens file and `DESIGN.md` together.
+3. Find every usage: the CSS variable, the matching utility classes, and the components that reference it.
+4. If visual regression tests exist, make sure the baseline screenshots are current.
+5. Change the tokens file and `DESIGN.md` together.
+6. Run `scripts/design-check.sh`, `design.md lint` and the visual regression tests. Show the user the expected visual changes for confirmation and fix the unexpected ones. Update the baselines only after confirmation.
+7. Do not write a changelog inside `DESIGN.md`; describe the change in the commit and pull request.
 
 ## Definition of done
 
@@ -154,14 +160,14 @@ Use them when available. Without them, follow this skill by hand:
 
 | Tool | Where it helps |
 |---|---|
-| impeccable | Phase 1 `init`, phase 2 `shape`, phase 5 `critique` / `audit` / `polish`, plus `document` and `extract` |
+| `design-system-visual` and its partner skill | Phase 2 directions, the look of components and pages, phase 5 critique and polish |
 | shadcn/ui skill or CLI | Base components |
 | Storybook MCP (`@storybook/addon-mcp`) | Read the component list, generate stories, run tests |
 | `@google/design.md` CLI | `lint`, `diff`, `export` |
 | A data visualization skill | Chart colors and specs for dashboards |
 | A browser or screenshot tool | Visual checks in phases 2, 3 and 5 |
 
-When another tool writes `PRODUCT.md` or `DESIGN.md` (for example impeccable's `init` or `document`), the file must still follow the sections of this skill's templates. Fill in what is missing; do not create a second file.
+When another tool writes `PRODUCT.md` or `DESIGN.md` (for example a partner skill of `design-system-visual`), the file must still follow the sections of this skill's templates. Fill in what is missing; do not create a second file.
 
 ## When to stop and ask
 
